@@ -67,14 +67,9 @@ class SupervisordCheck(AgentCheck):
             self.service_check('supervisord.process.check',
                                status, tags=tags, message=msg)
             # Report Uptime
-            uptime = self._extract_uptime(proc)
-            self.gauge('supervisord.process.uptime', uptime, tags=tags)
-
-        # Report counts by status
-        tags = ['supervisord', 'server:%s' % server_name]
-        for proc_status in PROCESS_STATUS:
-            self.gauge('supervisord.process.count', count[proc_status],
-                       tags=tags + ['status:%s' % PROCESS_STATUS[proc_status]])
+            self.gauge('supervisord.process.uptime', self._extract_uptime(proc), tags=tags)
+            # Report counts by status
+            self.gauge('supervisord.process.count', 1, tags=tags + ['status:%s' % PROCESS_STATUS[status]])
 
     def _connect(self, instance):
         host = instance.get('host', DEFAULT_HOST)
