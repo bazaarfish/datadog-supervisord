@@ -58,7 +58,6 @@ class SupervisordCheck(AgentCheck):
             # Report Service Check
             status = DD_STATUS[proc['statename']]
             msg = self._build_message(proc)
-            count[status] += 1
             self.service_check('supervisord.process.check',
                                status, tags=tags, message=msg)
             # Report Uptime
